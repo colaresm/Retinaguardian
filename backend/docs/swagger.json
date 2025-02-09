@@ -1,0 +1,51 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Endpoints of Retinaguard API",
+        "title": "Retinaguard",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8034",
+    "basePath": "/",
+    "paths": {
+        "/api/healthy": {
+            "get": {
+                "description": "Check if application if healthy",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "handlerHealthy"
+                ],
+                "summary": "Check healthy",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Healthy"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Healthy": {
+            "type": "object",
+            "properties": {
+                "is_healthy": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

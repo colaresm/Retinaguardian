@@ -1,0 +1,34 @@
+basePath: /
+definitions:
+  models.Healthy:
+    properties:
+      is_healthy:
+        type: boolean
+    type: object
+host: localhost:8034
+info:
+  contact: {}
+  description: Endpoints of Retinaguard API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Retinaguard
+  version: "1.0"
+paths:
+  /api/healthy:
+    get:
+      consumes:
+      - application/json
+      description: Check if application if healthy
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Healthy'
+      summary: Check healthy
+      tags:
+      - handlerHealthy
+swagger: "2.0"
