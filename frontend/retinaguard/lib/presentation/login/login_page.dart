@@ -20,8 +20,12 @@ class _LoginPageState extends State<LoginPage> {
         return Center(
           child: Column(
             children: [
+                SizedBox(
+                height: constraints.maxHeight * 0.1,
+              ),
+              Image.asset('assets/logo.png'),
               SizedBox(
-                height: constraints.maxHeight * 0.4,
+                height: constraints.maxHeight * 0.05,
               ),
               CustomTextField(
                 height: constraints.maxHeight * 0.1,
