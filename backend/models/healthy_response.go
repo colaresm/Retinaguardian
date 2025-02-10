@@ -1,5 +1,5 @@
 package models
 
-type Healthy struct {
+type HealthyResponse struct {
 	IsHealthy bool `json:"is_healthy"`
 }

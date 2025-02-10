@@ -30,14 +30,37 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "handlerHealthy"
+                    "healthyHandler"
                 ],
                 "summary": "Check healthy",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Healthy"
+                            "$ref": "#/definitions/models.HealthyResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "description": "Get your access token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "loginHandler"
+                ],
+                "summary": "Get Access token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthResponse"
                         }
                     }
                 }
@@ -45,7 +68,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Healthy": {
+        "models.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.HealthyResponse": {
             "type": "object",
             "properties": {
                 "is_healthy": {

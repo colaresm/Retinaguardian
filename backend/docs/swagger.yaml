@@ -1,6 +1,11 @@
 basePath: /
 definitions:
-  models.Healthy:
+  models.AuthResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
+  models.HealthyResponse:
     properties:
       is_healthy:
         type: boolean
@@ -27,8 +32,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Healthy'
+            $ref: '#/definitions/models.HealthyResponse'
       summary: Check healthy
       tags:
-      - handlerHealthy
+      - healthyHandler
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Get your access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+      summary: Get Access token
+      tags:
+      - loginHandler
 swagger: "2.0"
