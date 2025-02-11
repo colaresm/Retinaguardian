@@ -7,8 +7,6 @@ import (
 	"net/http"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/models"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 // postLogin
@@ -27,8 +25,8 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 		if err != nil {
 			log.Println(err)
 		}
-		match := CheckPasswordHash(u.Password, foundUser.Password)
-		if u.Email == foundUser.Email && match {
+		matchPassword := CheckPasswordHash(u.Password, foundUser.Password)
+		if u.Email == foundUser.Email && matchPassword {
 			accessToken, err := CreateToken(u.Email)
 			if err != nil {
 				sendJSON(w, models.Response{Data: models.Response{
@@ -42,8 +40,4 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 				Data: models.Response{Error: "Invalid credentials"}}, http.StatusUnauthorized)
 		}
 	}
-}
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
 }

@@ -1,10 +1,8 @@
 package api
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
-	"log"
 	"log/slog"
 	"net/http"
 	db "retinaguard/db/db/sqlc"
@@ -12,9 +10,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/google/uuid"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func NewHandler(database *sql.DB) http.Handler {
@@ -61,31 +57,5 @@ func healthyHandler() http.HandlerFunc {
 		var response models.HealthyResponse
 		response.IsHealthy = true
 		sendJSON(w, models.Response{Data: response}, http.StatusOK)
-	}
-}
-
-// createPatientHandler
-// @Summary Create patient
-// @Description Create patient
-// @Tags Create Patient Handler
-// @Accept json
-// @Produce json
-// @Success 201 {object} models.User
-// @Router /api/patient [POST]
-func createPatientHandler(queries *db.Queries) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var u models.User
-		json.NewDecoder(r.Body).Decode(&u)
-		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-
-		err := queries.CreateUser(context.Background(), db.CreateUserParams{ID: uuid.New().String(),
-			Email: u.Email, Password: string(hashedPassword)})
-		if err != nil {
-			log.Println("Erro ao criar usuário:", err)
-			sendJSON(w, models.Response{Data: models.Response{Error: "Erro ao criar usuário"}}, http.StatusBadGateway)
-
-		}
-		sendJSON(w, models.Response{Data: models.Response{}}, http.StatusCreated)
-
 	}
 }

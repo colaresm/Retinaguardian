@@ -7,7 +7,30 @@ package db
 
 import (
 	"context"
+	"time"
 )
+
+const createPatient = `-- name: CreatePatient :exec
+INSERT INTO patients (id, name, birthday, user_id)
+VALUES ($1, $2, $3, $4)
+`
+
+type CreatePatientParams struct {
+	ID       string
+	Name     string
+	Birthday time.Time
+	UserID   string
+}
+
+func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) error {
+	_, err := q.db.ExecContext(ctx, createPatient,
+		arg.ID,
+		arg.Name,
+		arg.Birthday,
+		arg.UserID,
+	)
+	return err
+}
 
 const createUser = `-- name: CreateUser :exec
 INSERT INTO users (id,email, password)

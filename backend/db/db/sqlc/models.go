@@ -4,6 +4,17 @@
 
 package db
 
+import (
+	"time"
+)
+
+type Patient struct {
+	ID       string
+	Name     string
+	Birthday time.Time
+	UserID   string
+}
+
 type User struct {
 	ID       string
 	Password string
