@@ -35,7 +35,7 @@ paths:
             $ref: '#/definitions/models.HealthyResponse'
       summary: Check healthy
       tags:
-      - healthyHandler
+      - healthy Handler
   /api/login:
     post:
       consumes:
@@ -48,7 +48,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.AuthResponse'
-      summary: Get Access token
+      summary: Get access token
       tags:
-      - loginHandler
+      - login Handler
 swagger: "2.0"

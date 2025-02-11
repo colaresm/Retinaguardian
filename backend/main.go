@@ -1,12 +1,19 @@
 package main
 
 import (
+	"database/sql"
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
 	"retinaguard/api"
 	_ "retinaguard/docs"
 	"time"
+
+	_ "github.com/golang-migrate/migrate/v4/database/postgres" // Importa o driver do Postgres
+	_ "github.com/golang-migrate/migrate/v4/source/file"       // Importa o driver de arquivos
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 // @title Retinaguard
@@ -26,7 +33,10 @@ func main() {
 }
 
 func run() error {
-	db := make(map[string]string)
+	db, err := runDatabase() ///make(map[string]string)
+	if err != nil {
+		return err
+	}
 	handler := api.NewHandler(db)
 
 	s := http.Server{
@@ -42,4 +52,37 @@ func run() error {
 	}
 
 	return nil
+}
+
+func runDatabase() (*sql.DB, error) {
+	connStr := "postgresql://postgres:admim@localhost:5432/postgres?sslmode=disable"
+	db, err := sql.Open("pgx", connStr)
+	if err != nil {
+		log.Println("Erro ao conectar ao banco:", err)
+		return db, err
+	}
+	defer db.Close()
+
+	////	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	//	if err != nil {
+	//		log.Println(err)
+	//		return db, err
+
+	//	}
+
+	//	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "postgres", driver)/
+	//	if err != nil {
+	//		log.Println(err)
+	//		return db, err
+
+	//	}
+
+	//	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+	//		log.Println(err)
+	//		return db, err
+	//
+	//	}
+
+	//	log.Println("Migrações aplicadas com sucesso!")
+	return db, nil
 }

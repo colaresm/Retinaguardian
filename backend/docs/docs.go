@@ -30,7 +30,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "healthyHandler"
+                    "healthy Handler"
                 ],
                 "summary": "Check healthy",
                 "responses": {
@@ -53,9 +53,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "loginHandler"
+                    "login Handler"
                 ],
-                "summary": "Get Access token",
+                "summary": "Get access token",
                 "responses": {
                     "200": {
                         "description": "OK",

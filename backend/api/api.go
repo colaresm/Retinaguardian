@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log/slog"
 	"net/http"
@@ -11,7 +12,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-func NewHandler(db map[string]string) http.Handler {
+func NewHandler(db *sql.DB) http.Handler {
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)
@@ -21,6 +22,7 @@ func NewHandler(db map[string]string) http.Handler {
 	r.Get("/api/healthy", healthyHandler())
 	r.Get("/api/swagger/*", httpSwagger.WrapHandler)
 	r.Post("/api/login", loginHandler())
+	r.Post("/api/patient", createPatientHandler(db))
 
 	return r
 }
@@ -43,7 +45,7 @@ func sendJSON(w http.ResponseWriter, resp models.Response, status int) {
 // getHealthy
 // @Summary Check healthy
 // @Description Check if application if healthy
-// @Tags healthyHandler
+// @Tags healthy Handler
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.HealthyResponse
@@ -57,9 +59,9 @@ func healthyHandler() http.HandlerFunc {
 }
 
 // postLogin
-// @Summary Get Access token
+// @Summary Get access token
 // @Description Get your access token
-// @Tags loginHandler
+// @Tags login Handler
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.AuthResponse
@@ -78,7 +80,34 @@ func loginHandler() http.HandlerFunc {
 			return
 		} else {
 			sendJSON(w, models.Response{Data: models.Response{Error: "Invalid credentials"}}, http.StatusUnauthorized)
+		}
+	}
+}
 
+// createPatientHandler
+// @Summary Create patient
+// @Description Create patient
+// @Tags Create patient handler
+// @Accept json
+// @Produce json
+// @Success 201 {object} models.AuthResponse
+// @Router /api/patient [POST]
+func createPatientHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var u models.User
+		json.NewDecoder(r.Body).Decode(&u)
+
+		//	db.
+
+		if u.Username == "Chek" && u.Password == "123456" {
+			accessToken, err := CreateToken(u.Username)
+			if err != nil {
+				sendJSON(w, models.Response{Data: models.Response{Error: err.Error()}}, http.StatusInternalServerError)
+			}
+			sendJSON(w, models.Response{Data: models.AuthResponse{AccessToken: accessToken}}, http.StatusOK)
+			return
+		} else {
+			sendJSON(w, models.Response{Data: models.Response{Error: "Invalid credentials"}}, http.StatusUnauthorized)
 		}
 	}
 }
