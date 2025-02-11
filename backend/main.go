@@ -33,11 +33,12 @@ func main() {
 }
 
 func run() error {
-	db, err := runDatabase() ///make(map[string]string)
+	database, err := startDatabase()
 	if err != nil {
 		return err
 	}
-	handler := api.NewHandler(db)
+
+	handler := api.NewHandler(database)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,
@@ -54,35 +55,19 @@ func run() error {
 	return nil
 }
 
-func runDatabase() (*sql.DB, error) {
+func startDatabase() (*sql.DB, error) {
 	connStr := "postgresql://postgres:admim@localhost:5432/postgres?sslmode=disable"
 	db, err := sql.Open("pgx", connStr)
 	if err != nil {
 		log.Println("Erro ao conectar ao banco:", err)
-		return db, err
+		return nil, err
 	}
-	defer db.Close()
 
-	////	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	//	if err != nil {
-	//		log.Println(err)
-	//		return db, err
+	if err := db.Ping(); err != nil {
+		log.Println("Erro ao testar conexão com o banco:", err)
+		db.Close()
+		return nil, err
+	}
 
-	//	}
-
-	//	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "postgres", driver)/
-	//	if err != nil {
-	//		log.Println(err)
-	//		return db, err
-
-	//	}
-
-	//	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-	//		log.Println(err)
-	//		return db, err
-	//
-	//	}
-
-	//	log.Println("Migrações aplicadas com sucesso!")
 	return db, nil
 }

@@ -10,6 +10,15 @@ definitions:
       is_healthy:
         type: boolean
     type: object
+  models.User:
+    properties:
+      Email:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+    type: object
 host: localhost:8034
 info:
   contact: {}
@@ -35,7 +44,7 @@ paths:
             $ref: '#/definitions/models.HealthyResponse'
       summary: Check healthy
       tags:
-      - healthy Handler
+      - Healthy Handler
   /api/login:
     post:
       consumes:
@@ -48,7 +57,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.AuthResponse'
-      summary: Get access token
+      summary: Get access token teste
       tags:
-      - login Handler
+      - Login Handler
+  /api/patient:
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Create patient
+      tags:
+      - Create Patient Handler
 swagger: "2.0"

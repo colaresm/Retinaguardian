@@ -30,7 +30,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "healthy Handler"
+                    "Healthy Handler"
                 ],
                 "summary": "Check healthy",
                 "responses": {
@@ -53,14 +53,37 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "login Handler"
+                    "Login Handler"
                 ],
-                "summary": "Get access token",
+                "summary": "Get access token teste",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/patient": {
+            "post": {
+                "description": "Create patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Create Patient Handler"
+                ],
+                "summary": "Create patient",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 }
@@ -81,6 +104,20 @@ const docTemplate = `{
             "properties": {
                 "is_healthy": {
                     "type": "boolean"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         }

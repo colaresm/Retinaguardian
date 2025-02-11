@@ -1,9 +1,10 @@
 version: "2"
 sql:
-  - engine: "postgresql"
-    queries: "user.sql"
-    schema: "user.sql"
+  - engine: "postgresql"  # ou "mysql"
+    schema: "schema.sql"
+    queries: "queries"
     gen:
       go:
         package: "db"
-        out: "db"
+        out: "db/sqlc"
+        sql_package: "database/sql"
