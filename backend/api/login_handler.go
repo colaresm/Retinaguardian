@@ -7,6 +7,7 @@ import (
 	"net/http"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/models"
+	"retinaguard/responses"
 )
 
 // postLogin
@@ -29,14 +30,14 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 		if u.Email == foundUser.Email && matchPassword {
 			accessToken, err := CreateToken(u.Email)
 			if err != nil {
-				sendJSON(w, models.Response{Data: models.Response{
+				responses.SendJSON(w, models.Response{Data: models.Response{
 					Error: err.Error()}}, http.StatusInternalServerError)
 			}
-			sendJSON(w, models.Response{
+			responses.SendJSON(w, models.Response{
 				Data: models.AuthResponse{AccessToken: accessToken}}, http.StatusOK)
 			return
 		} else {
-			sendJSON(w, models.Response{
+			responses.SendJSON(w, models.Response{
 				Data: models.Response{Error: "Invalid credentials"}}, http.StatusUnauthorized)
 		}
 	}

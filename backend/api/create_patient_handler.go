@@ -7,9 +7,10 @@ import (
 	"net/http"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/models"
+	"retinaguard/responses"
+	"retinaguard/utils"
 
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // createPatientHandler
@@ -24,22 +25,28 @@ func createPatientHandler(queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var p models.CreatePatientRequest
 		json.NewDecoder(r.Body).Decode(&p)
-		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(p.User.Password), bcrypt.DefaultCost)
+		hashedPassword, _ := utils.EncryptPassword(p.User.Password)
 		userId := uuid.New().String()
 
-		err := queries.CreatePatient(context.Background(), db.CreatePatientParams{
-			ID: uuid.New().String(), Name: p.Name, Birthday: p.Birthday, UserID: userId})
+		formatedDate, err := utils.FormatDate(p.Birthday)
 		if err != nil {
-			log.Println("Error on create patient:", err)
-			sendJSON(w, models.Response{Data: models.Response{Error: "Error on create patient"}}, http.StatusBadGateway)
+			responses.PatientCreationError(w)
 		}
+
+		err = queries.CreatePatient(context.Background(), db.CreatePatientParams{
+			ID: uuid.New().String(), Name: p.Name, Birthday: formatedDate, UserID: userId})
+		if err != nil {
+			responses.PatientCreationError(w)
+		}
+
 		err = queries.CreateUser(context.Background(), db.CreateUserParams{
 			ID:    userId,
 			Email: p.User.Email, Password: string(hashedPassword)})
+
 		if err != nil {
 			log.Println("Error on create user:", err)
-			sendJSON(w, models.Response{Data: models.Response{Error: "Error on create user"}}, http.StatusBadGateway)
+			responses.PatientCreationError(w)
 		}
-		sendJSON(w, models.Response{Data: models.Response{}}, http.StatusCreated)
+		responses.SendJSON(w, models.Response{Data: models.Response{}}, http.StatusCreated)
 	}
 }

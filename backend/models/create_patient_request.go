@@ -1,9 +1,7 @@
 package models
 
-import "time"
-
 type CreatePatientRequest struct {
-	Name     string    `json:"name"`
-	Birthday time.Time `json:"birthday"`
-	User     User      `json:"user"`
+	Name     string `json:"name"`
+	Birthday string `json:"birthday"`
+	User     User   `json:"user"`
 }

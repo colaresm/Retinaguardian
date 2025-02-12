@@ -55,7 +55,7 @@ const docTemplate = `{
                 "tags": [
                     "Login Handler"
                 ],
-                "summary": "Get access token teste",
+                "summary": "Get access token",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -83,7 +83,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.CreatePatientRequest"
                         }
                     }
                 }
@@ -99,6 +99,20 @@ const docTemplate = `{
                 }
             }
         },
+        "models.CreatePatientRequest": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
         "models.HealthyResponse": {
             "type": "object",
             "properties": {
@@ -110,7 +124,7 @@ const docTemplate = `{
         "models.User": {
             "type": "object",
             "properties": {
-                "Email": {
+                "email": {
                     "type": "string"
                 },
                 "id": {
