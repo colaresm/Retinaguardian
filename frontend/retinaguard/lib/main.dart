@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:retinaguard/domain/use_cases/dependency_injection.dart';
 import 'presentation/login/login_page.dart';
 
 void main() {
+  dependencyInjection();
   runApp(const MyApp());
 }
 
