@@ -4,6 +4,11 @@ type CustomErrorResponse struct {
 	message string
 }
 
-func (c CustomErrorResponse) CustomError() string { return c.message }
+func (s CustomErrorResponse) Error() string { return s.message }
 
-func PatientCreation() CustomErrorResponse { return CustomErrorResponse{"operacao invalida"} }
+func PatientCreationError(err error) error {
+	return CustomErrorResponse{"Error on create patient: " + err.Error()}
+}
+func PatientValidationError(err error) error {
+	return CustomErrorResponse{"Error on validate patient: " + err.Error()}
+}

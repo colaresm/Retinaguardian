@@ -1,16 +1,15 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
-	"log"
+	_ "errors"
 	"net/http"
 	db "retinaguard/db/db/sqlc"
+	"retinaguard/errors"
 	"retinaguard/models"
 	"retinaguard/responses"
+	"retinaguard/services"
 	"retinaguard/utils"
-
-	"github.com/google/uuid"
 )
 
 // createPatientHandler
@@ -24,29 +23,12 @@ import (
 func createPatientHandler(queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var p models.CreatePatientRequest
-		json.NewDecoder(r.Body).Decode(&p)
-		hashedPassword, _ := utils.EncryptPassword(p.User.Password)
-		userId := uuid.New().String()
-
-		formatedDate, err := utils.FormatDate(p.Birthday)
+		err := json.NewDecoder(r.Body).Decode(&p)
 		if err != nil {
-			responses.PatientCreationError(w)
+			responses.PatientErrorResponse(w, errors.PatientCreationError(err))
+			return
 		}
-
-		err = queries.CreatePatient(context.Background(), db.CreatePatientParams{
-			ID: uuid.New().String(), Name: p.Name, Birthday: formatedDate, UserID: userId})
-		if err != nil {
-			responses.PatientCreationError(w)
-		}
-
-		err = queries.CreateUser(context.Background(), db.CreateUserParams{
-			ID:    userId,
-			Email: p.User.Email, Password: string(hashedPassword)})
-
-		if err != nil {
-			log.Println("Error on create user:", err)
-			responses.PatientCreationError(w)
-		}
-		responses.SendJSON(w, models.Response{Data: models.Response{}}, http.StatusCreated)
+		services.CreateNewPatient(utils.CreatePatientParams{Queries: queries, W: w, Patient: p})
+		responses.SendJSON(w, models.Response{Data: nil}, http.StatusCreated)
 	}
 }

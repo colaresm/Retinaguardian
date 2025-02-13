@@ -5,7 +5,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"retinaguard/errors"
 	"retinaguard/models"
 )
 
@@ -23,8 +22,7 @@ func SendJSON(w http.ResponseWriter, resp models.Response, status int) {
 		return
 	}
 }
-func PatientCreationError(w http.ResponseWriter) {
-	SendJSON(w, models.Response{
-		Data: models.Response{Error: errors.PatientCreation().CustomError()}},
-		http.StatusBadGateway)
+
+func PatientErrorResponse(w http.ResponseWriter, err error) {
+	SendJSON(w, models.Response{Error: err.Error()}, http.StatusBadGateway)
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:retinaguard/presentation/login/bloc/login_bloc.dart';
+import 'package:retinaguard/presentation/login/bloc/states/login_state.dart';
 import 'package:retinaguard/widgets/custom_elevated_button.dart';
 import 'package:retinaguard/widgets/custom_text_field.dart';
 
@@ -16,7 +19,12 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.green,
       ),
-      body: LayoutBuilder(builder: (context, constraints) {
+      body: BlocConsumer<LoginBloc, LoginState>(listener:  (context,state){
+        if(state is LoginSuccess){
+          print("Login bem-sucedido!");
+        }
+      },builder: (context,state){
+       return LayoutBuilder(builder: (context, constraints) {
         return Center(
           child: Column(
             children: [
@@ -62,7 +70,8 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         );
-      }),
+      });
+      })
     );
   }
 }
