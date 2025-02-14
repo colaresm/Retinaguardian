@@ -12,6 +12,5 @@ void dependencyInjection() {
   getDependency.registerLazySingleton(() => AuthRemoteDataSourceImpl());
   getDependency.registerLazySingleton(() => AuthRepositoryImpl(getDependency<AuthRemoteDataSourceImpl>()));
   getDependency.registerLazySingleton(() => LoginUseCase(getDependency<AuthRepositoryImpl>()));
-
   getDependency.registerFactory(() => LoginBloc(getDependency<LoginUseCase>(),));
 }

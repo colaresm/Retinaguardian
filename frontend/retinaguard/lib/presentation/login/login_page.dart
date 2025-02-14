@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:retinaguard/core/redirect_pages.dart';
 import 'package:retinaguard/domain/use_cases/dependency_injection.dart';
 import 'package:retinaguard/presentation/login/bloc/events/login_event.dart';
 import 'package:retinaguard/presentation/login/bloc/login_bloc.dart';
@@ -28,19 +29,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.blue[500],
         ),
         body: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is LoginSuccess) {
-                print(state.accessToken);
+                Fluttertoast.showToast(
+                  msg: "Login realizado com sucesso",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.TOP,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 18.0,
+                );
+                redirectToHomePage(context);
               }
               if (state is LoginError) {
                 Fluttertoast.showToast(
                   msg: state.message,
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.TOP,
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Colors.red,
                   textColor: Colors.white,
                   fontSize: 18.0,
                 );
@@ -85,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           print("Ação de recuperação de senha executada!");
                         },
-                        child: const Text(
+                        child:  Text(
                           "Esqueceu a senha?",
                           style: TextStyle(
-                            color: Colors.green,
+                            color: Colors.blue[500],
                             fontSize: 16,
                             decoration: TextDecoration.underline,
                           ),
