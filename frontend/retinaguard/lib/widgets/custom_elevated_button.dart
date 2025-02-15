@@ -26,7 +26,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[500]),
           onPressed: widget.onPressed,
-          child: Text(widget.hintText,style: const TextStyle(color: Colors.white)),
+          child: Text(widget.hintText,style: const TextStyle(color: Colors.white,fontSize: 16)),
         ),
       ),
     );

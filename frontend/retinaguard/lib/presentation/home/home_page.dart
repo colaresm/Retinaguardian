@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:retinaguard/widgets/body.dart';
 import 'package:retinaguard/widgets/custom_elevated_button.dart';
+
+import 'widgets/custom_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,57 +14,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[500],
-      ),
-      backgroundColor: Colors.blue[500],
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
+    return LayoutBuilder(builder: (context, constraints) {
+      return Body(
+        onRefresh: () {},
+        constraints: constraints,
+        content: Column(
           children: [
-            Container(
-              height: constraints.maxHeight * 0.1,
-              width: constraints.maxWidth,
-              decoration: BoxDecoration(
-                color: Colors.blue[500],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left:8.0),
-                    child: Text(
-                      "Bem vindo",
-                      style: TextStyle(fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
+            SizedBox(
+              height: constraints.maxHeight * 0.06,
             ),
-            Container(
-              height: constraints.maxHeight * 0.9,
-              width: constraints.maxWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+            CustomElevatedButton(
+                height: constraints.maxHeight * 0.06,
+                width: constraints.maxWidth * 0.9,
+                hintText: "Novo paciente",
+                onPressed: () {}),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: constraints.maxWidth * 0.07,
+                  right: constraints.maxWidth * 0.07),
+              child: SizedBox(
+                height: constraints.maxHeight * 0.6,
+                width: constraints.maxWidth,
+                child: ListView.builder(
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    return CustomCard();
+                  },
+                ),
               ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: constraints.maxHeight * 0.06,
-                  ),
-                  CustomElevatedButton(
-                      height: constraints.maxHeight * 0.06,
-                      width: constraints.maxWidth * 0.9,
-                      hintText: "Novo paciente",
-                      onPressed: () {})
-                ],
-              ),
-            ),
+            )
           ],
-        );
-      }),
-      //  bottomNavigationBar: ,
-    );
+        ),
+      );
+    });
   }
 }
