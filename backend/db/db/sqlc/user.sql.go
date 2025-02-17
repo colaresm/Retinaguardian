@@ -10,6 +10,30 @@ import (
 	"time"
 )
 
+const createDoctor = `-- name: CreateDoctor :exec
+INSERT INTO doctors (id, name,crm ,birthday, user_id)
+VALUES ($1, $2, $3, $4,$5)
+`
+
+type CreateDoctorParams struct {
+	ID       string
+	Name     string
+	Crm      string
+	Birthday time.Time
+	UserID   string
+}
+
+func (q *Queries) CreateDoctor(ctx context.Context, arg CreateDoctorParams) error {
+	_, err := q.db.ExecContext(ctx, createDoctor,
+		arg.ID,
+		arg.Name,
+		arg.Crm,
+		arg.Birthday,
+		arg.UserID,
+	)
+	return err
+}
+
 const createPatient = `-- name: CreatePatient :exec
 INSERT INTO patients (id, name, birthday, user_id)
 VALUES ($1, $2, $3, $4)

@@ -24,8 +24,7 @@ class _HomePageState extends State<HomePage> {
               height: constraints.maxHeight * 0.06,
             ),
             CustomElevatedButton(
-                height: constraints.maxHeight * 0.06,
-                width: constraints.maxWidth * 0.9,
+            
                 hintText: "Novo paciente",
                 onPressed: () {}),
             Padding(

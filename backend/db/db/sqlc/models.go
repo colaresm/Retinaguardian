@@ -8,6 +8,14 @@ import (
 	"time"
 )
 
+type Doctor struct {
+	ID       string
+	Name     string
+	Crm      string
+	Birthday time.Time
+	UserID   string
+}
+
 type Patient struct {
 	ID       string
 	Name     string

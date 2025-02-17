@@ -5,6 +5,17 @@ definitions:
       access_token:
         type: string
     type: object
+  models.CreateDoctorRequest:
+    properties:
+      birthday:
+        type: string
+      crm:
+        type: string
+      name:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
   models.CreatePatientRequest:
     properties:
       birthday:
@@ -39,6 +50,21 @@ info:
   title: Retinaguard
   version: "1.0"
 paths:
+  /api/doctor:
+    post:
+      consumes:
+      - application/json
+      description: Create doctor
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CreateDoctorRequest'
+      summary: Create Doctor
+      tags:
+      - Create Doctor Handler
   /api/healthy:
     get:
       consumes:

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"net/http"
 	"regexp"
 	db "retinaguard/db/db/sqlc"
@@ -27,6 +28,12 @@ type CreatePatientParams struct {
 	Patient models.CreatePatientRequest
 }
 
+type CreateDoctorParams struct {
+	Queries *db.Queries
+	W       http.ResponseWriter
+	Doctor  models.CreateDoctorRequest
+}
+
 func IsValidEmail(email string) bool {
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	re := regexp.MustCompile(emailRegex)
@@ -35,4 +42,23 @@ func IsValidEmail(email string) bool {
 
 func IsEmailAlreadyRegistered(oldEmail, newEmail string) bool {
 	return oldEmail == newEmail
+}
+
+func ValidateDate(date string) (error, bool) {
+	if date == "" {
+		return errors.New("a data não pode ser vazia"), false
+	}
+
+	inputDate, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return errors.New("erro ao converter a data"), false
+	}
+
+	today := time.Now().Format("2006-01-02")
+	currentDate, _ := time.Parse("2006-01-02", today)
+
+	if inputDate.Equal(currentDate) || inputDate.After(currentDate) {
+		return errors.New("a data fornecida é igual ou posterior à data atual"), false
+	}
+	return nil, true
 }

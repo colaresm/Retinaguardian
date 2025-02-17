@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatefulWidget {
   const CustomElevatedButton(
-      {required this.width,
-      required this.height,
-      required this.hintText,
-      required this.onPressed,
-      super.key});
-  final double width;
-  final double height;
+      {required this.hintText, required this.onPressed, super.key});
+
   final String hintText;
   final Function() onPressed;
   @override
@@ -19,14 +14,20 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.width,
-      height: widget.height,
+      width: MediaQuery.of(context).size.width * 0.86,
+      height: MediaQuery.of(context).size.height * 0.06,
       child: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[500]),
           onPressed: widget.onPressed,
-          child: Text(widget.hintText,style: const TextStyle(color: Colors.white,fontSize: 16)),
+          child: Text(
+            widget.hintText.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
         ),
       ),
     );

@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
-    required this.width,
-    required this.height,
     required this.hintText,
+    required this.controller,
+    this.isPassword = false,
+  required  this.validator,
     Key? key,
   }) : super(key: key);
-  final double width;
-  final double height;
+
   final String hintText;
+  final TextEditingController controller;
+  final bool isPassword;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: SizedBox(
-        width: width,
-        height: height,
+        width: MediaQuery.of(context).size.width * 0.86,
+        height: MediaQuery.of(context).size.height * 0.08,
         child: TextFormField(
+          validator: (value) => validator(value),
+          obscureText: isPassword,
+          controller: controller,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: hintText.toUpperCase(),
             filled: true,
             fillColor: Colors.white,
             contentPadding:

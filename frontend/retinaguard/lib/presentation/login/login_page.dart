@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retinaguard/core/redirect_pages.dart';
+import 'package:retinaguard/core/show_toast.dart';
+import 'package:retinaguard/core/validations.dart';
 import 'package:retinaguard/domain/use_cases/dependency_injection.dart';
 import 'package:retinaguard/presentation/login/bloc/events/login_event.dart';
 import 'package:retinaguard/presentation/login/bloc/login_bloc.dart';
@@ -25,99 +26,108 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailCotroller = TextEditingController();
+  final TextEditingController _passwordCotroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue[500],
-        ),
-        body: BlocConsumer<LoginBloc, LoginState>(
-            listener: (context, state) {
-              if (state is LoginSuccess) {
-                Fluttertoast.showToast(
-                  msg: "Login realizado com sucesso",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.TOP,
-                  backgroundColor: Colors.green,
-                  textColor: Colors.white,
-                  fontSize: 18.0,
-                );
-                redirectToHomePage(context);
-              }
-              if (state is LoginError) {
-                Fluttertoast.showToast(
-                  msg: state.message,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.TOP,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 18.0,
-                );
-              }
-            },
-            bloc: _loginBloc,
-            builder: (context, state) {
-              return LayoutBuilder(builder: (context, constraints) {
-                return Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: constraints.maxHeight * 0.1,
-                      ),
-                      Image.asset('assets/logo.png'),
-                      SizedBox(
-                        height: constraints.maxHeight * 0.05,
-                      ),
-                      CustomTextField(
-                        height: constraints.maxHeight * 0.1,
-                        width: constraints.maxWidth * 0.9,
-                        hintText: "Digite seu email ",
-                      ),
-                      CustomTextField(
-                        height: constraints.maxHeight * 0.1,
-                        width: constraints.maxWidth * 0.9,
-                        hintText: "Digite sua senha ",
-                      ),
-                      CustomElevatedButton(
-                          height: constraints.maxHeight * 0.06,
-                          width: constraints.maxWidth * 0.9,
-                          hintText: "Login",
-                          onPressed: () {
-                            _loginBloc.add(AuthEvent(
-                                email: "colaresmarcelo2018@gmail.com",
-                                password: "qwe123"));
-                          }),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("Ação de recuperação de senha executada!");
-                        },
-                        child:  Text(
-                          "Esqueceu a senha?",
-                          style: TextStyle(
-                            color: Colors.blue[500],
-                            fontSize: 16,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
+      appBar: AppBar(
+        backgroundColor: Colors.blue[500],
+      ),
+      body: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginSuccess) {
+            showToast(message: "Login realizado com sucesso", isError: true);
+            redirectToHomePage(context);
+          }
+          if (state is LoginError) {
+            showToast(message: state.message, isError: true);
+          }
+        },
+        bloc: _loginBloc,
+        builder: (context, state) {
+          return LayoutBuilder(builder: (context, constraints) {
+            return Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: constraints.maxHeight * 0.1,
                   ),
-                );
-              });
-            }));
+                  Image.asset('assets/logo.png'),
+                  SizedBox(
+                    height: constraints.maxHeight * 0.05,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          validator: validateEmail,
+                          controller: _emailCotroller,
+                          hintText: "Digite seu email ",
+                        ),
+                        CustomTextField(
+                          validator: requiredFiled,
+                          controller: _passwordCotroller,
+                          isPassword: true,
+                          hintText: "Digite sua senha ",
+                        ),
+                        CustomElevatedButton(
+                          hintText: "Login",
+                          onPressed: _onPressLogin,
+                        ),
+                      ],
+                    ),
+                  ),
+                   const SizedBox(
+                    height: 40,
+                  ),
+                  GestureDetector(
+                    onTap: () => redirectToCrateDoctorPage(context),
+                    child: Text(
+                      "Criar conta",
+                      style: TextStyle(
+                        color: Colors.blue[500],
+                        fontSize: 16,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => redirectToCrateDoctorPage(context),
+                    child: Text(
+                      "Esqueceu a senha?",
+                      style: TextStyle(
+                        color: Colors.blue[500],
+                        fontSize: 16,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        },
+      ),
+    );
   }
 
-  void showCustomToast() {
-    Fluttertoast.showToast(
-      msg: "Isso é um Toast em Flutter!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      backgroundColor: Colors.redAccent,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+  void _onPressLogin() {
+    if (_formKey.currentState!.validate()) {
+      _loginBloc.add(
+        AuthEvent(
+          email: _emailCotroller.text,
+          password: _emailCotroller.text,
+        ),
+      );
+    }
   }
 }

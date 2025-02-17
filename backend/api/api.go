@@ -24,6 +24,7 @@ func NewHandler(database *sql.DB) http.Handler {
 	r.Get("/api/swagger/*", httpSwagger.WrapHandler)
 	r.Post("/api/login", loginHandler(queries))
 	r.Post("/api/patient", createPatientHandler(queries))
+	r.Post("/api/doctor", createDoctorHandler(queries))
 
 	return r
 }

@@ -11,3 +11,12 @@ CREATE TABLE patients (
     user_id VARCHAR(36) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE doctors (
+    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    crm VARCHAR(255) NOT NULL,
+    birthday DATE NOT NULL,
+    user_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
