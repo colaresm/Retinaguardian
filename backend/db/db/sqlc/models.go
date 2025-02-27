@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+type Classification struct {
+	ID            string
+	Retinography  []byte
+	PatientID     string
+	PerformedDate time.Time
+}
+
 type Doctor struct {
 	ID       string
 	Name     string

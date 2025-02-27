@@ -25,6 +25,7 @@ func NewHandler(database *sql.DB) http.Handler {
 	r.Post("/api/login", loginHandler(queries))
 	r.Post("/api/patient", createPatientHandler(queries))
 	r.Post("/api/doctor", createDoctorHandler(queries))
+	r.Post("/api/classification", classificationHandler(queries))
 
 	return r
 }

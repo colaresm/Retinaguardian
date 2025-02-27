@@ -33,6 +33,12 @@ type CreateDoctorParams struct {
 	W       http.ResponseWriter
 	Doctor  models.CreateDoctorRequest
 }
+type CreateClassificationParams struct {
+	Queries      *db.Queries
+	W            http.ResponseWriter
+	Retinography []byte
+	PatientId    string
+}
 
 func IsValidEmail(email string) bool {
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
