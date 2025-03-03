@@ -17,6 +17,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Email**: youremail@example.com
-- **LinkedIn**: [yourlinkedin](https://www.linkedin.com/in/yourlinkedin)
+- **Email**: colaresmarcelo2018@gmail.com
+- **LinkedIn**: [yourlinkedin]([https://www.linkedin.com/in/yourlinkedin](https://www.linkedin.com/in/engmarcelocolares/))
 
