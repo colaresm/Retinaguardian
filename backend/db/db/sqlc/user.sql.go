@@ -11,8 +11,8 @@ import (
 )
 
 const createClassification = `-- name: CreateClassification :exec
-INSERT INTO classifications (id, patient_id,retinography,performed_date)
-VALUES ($1, $2, $3, $4)
+INSERT INTO classifications (id, patient_id,retinography,performed_date,prediction)
+VALUES ($1, $2, $3, $4,$5)
 `
 
 type CreateClassificationParams struct {
@@ -20,6 +20,7 @@ type CreateClassificationParams struct {
 	PatientID     string
 	Retinography  []byte
 	PerformedDate time.Time
+	Prediction    int32
 }
 
 func (q *Queries) CreateClassification(ctx context.Context, arg CreateClassificationParams) error {
@@ -28,6 +29,7 @@ func (q *Queries) CreateClassification(ctx context.Context, arg CreateClassifica
 		arg.PatientID,
 		arg.Retinography,
 		arg.PerformedDate,
+		arg.Prediction,
 	)
 	return err
 }

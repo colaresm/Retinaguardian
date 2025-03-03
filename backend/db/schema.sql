@@ -26,5 +26,6 @@ CREATE TABLE classifications (
     retinography  BLOB NOT NULL,
     patient_id VARCHAR(36) NOT NULL,
     performed_date DATE NOT NULL,
+    prediction INT NOT NULL,
     FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
 );

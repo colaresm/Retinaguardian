@@ -8,11 +8,13 @@ classify_bp = Blueprint('classify', __name__)
 
 @classify_bp.route('/classify', methods=['POST'])
 def classify_image():
-    if 'file' not in request.files:
+    if 'retinography' not in request.files:
         return jsonify({"error": "Nenhuma imagem enviada"}), 400
 
-    file = request.files['file']
+    file = request.files['retinography']
     file_bytes = np.frombuffer(file.read(), np.uint8) 
+    if file_bytes.size == 0:
+        return jsonify({"error": "Bytes vazios"}), 400
     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)  
 
     if image is None:

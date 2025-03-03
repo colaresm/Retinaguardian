@@ -13,6 +13,7 @@ type Classification struct {
 	Retinography  []byte
 	PatientID     string
 	PerformedDate time.Time
+	Prediction    int32
 }
 
 type Doctor struct {

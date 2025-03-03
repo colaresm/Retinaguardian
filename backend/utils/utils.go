@@ -38,7 +38,15 @@ type CreateClassificationParams struct {
 	W            http.ResponseWriter
 	Retinography []byte
 	PatientId    string
+	Prediction   int
 }
+
+type Prediction int
+
+const (
+	Healthy Prediction = iota
+	Presence
+)
 
 func IsValidEmail(email string) bool {
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
@@ -67,4 +75,11 @@ func ValidateDate(date string) (error, bool) {
 		return errors.New("a data fornecida é igual ou posterior à data atual"), false
 	}
 	return nil, true
+}
+
+func ConvertPredictionResponseToIota(prediction string) Prediction {
+	if prediction == "healthy" {
+		return Healthy
+	}
+	return Presence
 }

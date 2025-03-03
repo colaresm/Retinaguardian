@@ -1,6 +1,8 @@
 package api
 
 import (
+	"io"
+	"log"
 	"net/http"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/errors"
@@ -26,9 +28,16 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 			return
 		}
 
-		retinography := []byte(r.FormValue("retinography"))
+		file, _, err := r.FormFile("retinography")
+		if err != nil {
+			http.Error(w, "Erro ao receber o arquivo", http.StatusBadRequest)
+			log.Println("Erro ao acessar o arquivo:", err)
+			return
+		}
+		defer file.Close()
 		patientId := string(r.FormValue("patient_id"))
 
+		retinography, _ := io.ReadAll(file)
 		services.CreateNewClassification(utils.CreateClassificationParams{
 			Queries:      queries,
 			W:            w,

@@ -16,5 +16,5 @@ INSERT INTO doctors (id, name,crm ,birthday, user_id)
 VALUES ($1, $2, $3, $4,$5);
 
 -- name: CreateClassification :exec
-INSERT INTO classifications (id, patient_id,retinography,performed_date)
-VALUES ($1, $2, $3, $4);
+INSERT INTO classifications (id, patient_id,retinography,performed_date,prediction)
+VALUES ($1, $2, $3, $4,$5);
