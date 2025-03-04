@@ -1,0 +1,15 @@
+# configuração do Air
+root = "."  
+tmp_dir = "tmp"
+
+[build]
+  bin = "tmp/main"
+  cmd = "go build -o tmp/main ."
+  delay = 1000  # Delay de 1 segundo
+  exclude_dir = ["tmp", "vendor"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  log = "air.log"
+  send_interrupt = true
+
+[log]
+  time = true

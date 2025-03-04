@@ -30,7 +30,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Create Classification Handler"
+                    "Classification"
                 ],
                 "summary": "Create Classification",
                 "responses": {
@@ -38,6 +38,29 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.CreateClassificationRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/classifications": {
+            "get": {
+                "description": "Get List Of Classifications By Patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Classification"
+                ],
+                "summary": "Get Classifications",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ClassificationResponse"
                         }
                     }
                 }
@@ -99,7 +122,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Login Handler"
+                    "Login"
                 ],
                 "summary": "Get access token",
                 "responses": {
@@ -142,6 +165,23 @@ const docTemplate = `{
             "properties": {
                 "access_token": {
                     "type": "string"
+                }
+            }
+        },
+        "models.ClassificationResponse": {
+            "type": "object",
+            "properties": {
+                "performed_date": {
+                    "type": "string"
+                },
+                "prediction": {
+                    "type": "string"
+                },
+                "retinography": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

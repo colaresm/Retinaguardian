@@ -13,7 +13,7 @@ import (
 // postLogin
 // @Summary Get access token
 // @Description Get your access token
-// @Tags Login Handler
+// @Tags Login
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.AuthResponse

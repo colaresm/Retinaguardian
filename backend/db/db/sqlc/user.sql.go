@@ -96,6 +96,41 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 	return err
 }
 
+const getClassificationsByPatientId = `-- name: GetClassificationsByPatientId :many
+SELECT retinography, performed_date, prediction  
+FROM classifications  
+WHERE patient_id = $1
+`
+
+type GetClassificationsByPatientIdRow struct {
+	Retinography  []byte
+	PerformedDate time.Time
+	Prediction    int32
+}
+
+func (q *Queries) GetClassificationsByPatientId(ctx context.Context, patientID string) ([]GetClassificationsByPatientIdRow, error) {
+	rows, err := q.db.QueryContext(ctx, getClassificationsByPatientId, patientID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetClassificationsByPatientIdRow
+	for rows.Next() {
+		var i GetClassificationsByPatientIdRow
+		if err := rows.Scan(&i.Retinography, &i.PerformedDate, &i.Prediction); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT id, email, password 
 FROM users 
