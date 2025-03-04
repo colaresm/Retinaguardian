@@ -20,6 +20,29 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/classification": {
+            "post": {
+                "description": "Create Classification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Create Classification Handler"
+                ],
+                "summary": "Create Classification",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateClassificationRequest"
+                        }
+                    }
+                }
+            }
+        },
         "/api/doctor": {
             "post": {
                 "description": "Create doctor",
@@ -119,6 +142,20 @@ const docTemplate = `{
             "properties": {
                 "access_token": {
                     "type": "string"
+                }
+            }
+        },
+        "models.CreateClassificationRequest": {
+            "type": "object",
+            "properties": {
+                "patient_id": {
+                    "type": "string"
+                },
+                "retinography": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

@@ -10,6 +10,30 @@ import (
 	"time"
 )
 
+const createClassification = `-- name: CreateClassification :exec
+INSERT INTO classifications (id, patient_id,retinography,performed_date,prediction)
+VALUES ($1, $2, $3, $4,$5)
+`
+
+type CreateClassificationParams struct {
+	ID            string
+	PatientID     string
+	Retinography  []byte
+	PerformedDate time.Time
+	Prediction    int32
+}
+
+func (q *Queries) CreateClassification(ctx context.Context, arg CreateClassificationParams) error {
+	_, err := q.db.ExecContext(ctx, createClassification,
+		arg.ID,
+		arg.PatientID,
+		arg.Retinography,
+		arg.PerformedDate,
+		arg.Prediction,
+	)
+	return err
+}
+
 const createDoctor = `-- name: CreateDoctor :exec
 INSERT INTO doctors (id, name,crm ,birthday, user_id)
 VALUES ($1, $2, $3, $4,$5)

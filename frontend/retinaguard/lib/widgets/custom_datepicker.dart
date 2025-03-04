@@ -52,7 +52,8 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   maxDate: DateTime.now(),
                   onSelectionChanged: (dateRangePickerSelectionChangedArgs) {
                     _controller.text = extractDate(
-                        dateRangePickerSelectionChangedArgs.value.toString());
+                      dateRangePickerSelectionChangedArgs.value.toString(),
+                    );
                     widget.onDateSelected(_controller.text);
                     Navigator.of(context).pop();
                   },

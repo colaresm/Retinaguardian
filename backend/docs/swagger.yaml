@@ -5,6 +5,15 @@ definitions:
       access_token:
         type: string
     type: object
+  models.CreateClassificationRequest:
+    properties:
+      patient_id:
+        type: string
+      retinography:
+        items:
+          type: integer
+        type: array
+    type: object
   models.CreateDoctorRequest:
     properties:
       birthday:
@@ -50,6 +59,21 @@ info:
   title: Retinaguard
   version: "1.0"
 paths:
+  /api/classification:
+    post:
+      consumes:
+      - application/json
+      description: Create Classification
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CreateClassificationRequest'
+      summary: Create Classification
+      tags:
+      - Create Classification Handler
   /api/doctor:
     post:
       consumes:

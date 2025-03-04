@@ -2,12 +2,16 @@ package utils
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"regexp"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/models"
 	"time"
 
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -33,6 +37,20 @@ type CreateDoctorParams struct {
 	W       http.ResponseWriter
 	Doctor  models.CreateDoctorRequest
 }
+type CreateClassificationParams struct {
+	Queries      *db.Queries
+	W            http.ResponseWriter
+	Retinography []byte
+	PatientId    string
+	Prediction   int
+}
+
+type Prediction int32
+
+const (
+	Healthy Prediction = iota
+	Presence
+)
 
 func IsValidEmail(email string) bool {
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
@@ -61,4 +79,27 @@ func ValidateDate(date string) (error, bool) {
 		return errors.New("a data fornecida é igual ou posterior à data atual"), false
 	}
 	return nil, true
+}
+
+func ConvertPredictionResponseToIota(prediction string) Prediction {
+	if prediction == "healthy" {
+		return Healthy
+	}
+	return Presence
+}
+
+func BuildUrlFromDotEnv(path string) (string, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Erro ao carregar o arquivo .env")
+		return "", err
+	}
+
+	baseURL := os.Getenv("API_HOST")
+	if baseURL == "" {
+		log.Println("API_HOST não definida no .env")
+		return "", err
+	}
+	url := fmt.Sprintf(path, baseURL)
+	return url, nil
 }
