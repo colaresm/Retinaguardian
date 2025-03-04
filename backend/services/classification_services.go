@@ -1,15 +1,12 @@
 package services
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
-	"mime/multipart"
-	"net/http"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/errors"
+	"retinaguard/infraestructure"
 	"retinaguard/models"
 	"retinaguard/responses"
 	"retinaguard/utils"
@@ -19,59 +16,27 @@ import (
 )
 
 func CreateNewClassification(cd utils.CreateClassificationParams) {
-
 	queries := cd.Queries
 	dataTime, err := time.Parse("2006-01-02", time.Now().Format("2006-01-02"))
 	if err != nil {
 		log.Println("Erro ao converter a data:", err)
-		return
-	}
-	url := "http://127.0.0.1:5000/api/classify"
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("retinography", "retinography.jpg")
-
-	if err != nil {
-		fmt.Println("Erro ao criar form-data:", err)
+		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
 		return
 	}
 
-	_, err = part.Write(cd.Retinography)
-	if err != nil {
-		fmt.Println("Erro ao escrever bytes:", err)
-		return
-	}
-	writer.Close()
-
-	req, err := http.NewRequest("POST", url, body)
-	if err != nil {
-		fmt.Println("Erro ao criar a requisição:", err)
-		return
-	}
-
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-
-	client := &http.Client{}
-	response, err := client.Do(req)
-	if err != nil {
-		log.Println("Erro ao enviar a requisição:", err)
-		return
-	}
-	defer response.Body.Close()
-
-	var prediction models.PredictionResponse
-	err = json.NewDecoder(response.Body).Decode(&prediction)
+	prediction, err := GetClassification(cd)
 	if err != nil {
 		log.Println(err)
 		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
+		return
 	}
-	log.Println(prediction.Prediction)
+
 	err = queries.CreateClassification(context.Background(), db.CreateClassificationParams{
 		ID:            uuid.New().String(),
 		PatientID:     cd.PatientId,
 		Retinography:  cd.Retinography,
 		PerformedDate: dataTime,
-		Prediction:    int32(utils.ConvertPredictionResponseToIota(prediction.Prediction)),
+		Prediction:    prediction,
 	})
 
 	if err != nil {
@@ -79,5 +44,28 @@ func CreateNewClassification(cd utils.CreateClassificationParams) {
 		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
 		return
 	}
+}
+func GetClassification(cd utils.CreateClassificationParams) (int32, error) {
+	classificationUrl, err := utils.BuildUrlFromDotEnv("%s/api/classify")
+	if err != nil {
+		return 0, err
+	}
 
+	response, err := infraestructure.PostWithFormData(
+		models.FormDataBody{
+			Url:           classificationUrl,
+			Data:          cd.Retinography,
+			FileName:      "retinography",
+			FileExtension: "retinography.png"})
+	if err != nil {
+		log.Println(err)
+		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
+	}
+	var prediction models.PredictionResponse
+	err = json.NewDecoder(response).Decode(&prediction)
+	if err != nil {
+		log.Println(err)
+		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
+	}
+	return int32(utils.ConvertPredictionResponseToIota(prediction.Prediction)), nil
 }

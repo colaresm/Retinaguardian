@@ -2,12 +2,16 @@ package utils
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"regexp"
 	db "retinaguard/db/db/sqlc"
 	"retinaguard/models"
 	"time"
 
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,7 +45,7 @@ type CreateClassificationParams struct {
 	Prediction   int
 }
 
-type Prediction int
+type Prediction int32
 
 const (
 	Healthy Prediction = iota
@@ -82,4 +86,20 @@ func ConvertPredictionResponseToIota(prediction string) Prediction {
 		return Healthy
 	}
 	return Presence
+}
+
+func BuildUrlFromDotEnv(path string) (string, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Erro ao carregar o arquivo .env")
+		return "", err
+	}
+
+	baseURL := os.Getenv("API_HOST")
+	if baseURL == "" {
+		log.Println("API_HOST não definida no .env")
+		return "", err
+	}
+	url := fmt.Sprintf(path, baseURL)
+	return url, nil
 }
