@@ -38,7 +38,7 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 			return
 		} else {
 			responses.SendJSON(w, models.Response{
-				Data: models.Response{Error: "Invalid credentials"}}, http.StatusUnauthorized)
+				Data: models.Response{Error: "Credenciais inválidas"}}, http.StatusUnauthorized)
 		}
 	}
 }

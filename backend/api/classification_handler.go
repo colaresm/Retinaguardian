@@ -10,6 +10,7 @@ import (
 	"retinaguard/responses"
 	"retinaguard/services"
 	"retinaguard/utils"
+	"retinaguard/validations"
 )
 
 // CreateClassificationHandler
@@ -58,9 +59,15 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 // @Router /api/classifications [GET]
 func listClassificationsHandler(queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		patientId := r.URL.Query().Get("patient_id")
+		w.Header().Set("Content-Type", "application/json")
 
-		log.Println(patientId)
+		err := validations.ValidateToken(w, r)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		patientId := r.URL.Query().Get("patient_id")
 
 		classifications, err := services.GetClassificationsByPatientId(
 			utils.ListClassificationParams{
