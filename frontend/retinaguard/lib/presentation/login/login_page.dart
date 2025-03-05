@@ -83,9 +83,14 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                   const SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
+                  ElevatedButton(
+                      onPressed: () {
+                        redirectToListClassificationsPage(context);
+                      },
+                      child: Text("ss")),
                   GestureDetector(
                     onTap: () => redirectToCrateDoctorPage(context),
                     child: Text(

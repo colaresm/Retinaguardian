@@ -7,11 +7,9 @@ class CreateDoctorRepositoryImpl implements CreateDoctorRepository {
   final CreateDoctorDataSource createDoctorDataSource;
 
   CreateDoctorRepositoryImpl(this.createDoctorDataSource);
-
   @override
-  Future<EmptyResponseModel> createDoctor(CreateDoctorModel createDoctorModel) async {
+  Future<EmptyResponseModel> createDoctor(
+      CreateDoctorModel createDoctorModel) async {
     return await createDoctorDataSource.create(createDoctorModel);
   }
-  
-  
 }

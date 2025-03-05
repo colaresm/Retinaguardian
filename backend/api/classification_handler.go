@@ -15,7 +15,7 @@ import (
 // CreateClassificationHandler
 // @Summary Create Classification
 // @Description Create Classification
-// @Tags Create Classification Handler
+// @Tags Classification
 // @Accept json
 // @Produce json
 // @Success 201 {object} models.CreateClassificationRequest
@@ -45,5 +45,39 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 			PatientId:    patientId})
 
 		responses.SendJSON(w, models.Response{Data: nil}, http.StatusCreated)
+	}
+}
+
+// getClassifications
+// @Summary Get Classifications
+// @Description Get List Of Classifications By Patient
+// @Tags Classification
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.ClassificationResponse
+// @Router /api/classifications [GET]
+func listClassificationsHandler(queries *db.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		patientId := r.URL.Query().Get("patient_id")
+
+		log.Println(patientId)
+
+		classifications, err := services.GetClassificationsByPatientId(
+			utils.ListClassificationParams{
+				Queries:   queries,
+				PatientId: patientId,
+				W:         w,
+			})
+		if err != nil {
+			responses.ClassificationErrorResponse(w, errors.ClassificationListError(err))
+			return
+		}
+
+		classificationsMapped, err := utils.MapClassifications(classifications)
+		if err != nil {
+			responses.ClassificationErrorResponse(w, errors.ClassificationListError(err))
+			return
+		}
+		responses.SendJSON(w, models.Response{Data: classificationsMapped}, http.StatusOK)
 	}
 }

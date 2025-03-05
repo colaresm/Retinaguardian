@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
 	"retinaguard/api"
 	_ "retinaguard/docs"
+	"syscall"
 	"time"
 
 	_ "github.com/golang-migrate/migrate/v4/database/postgres" // Importa o driver do Postgres
@@ -47,9 +51,21 @@ func run() error {
 		Addr:         ":8034",
 		Handler:      handler,
 	}
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
 	if err := s.ListenAndServe(); err != nil {
 		return err
+	}
+	<-stop
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := s.Shutdown(ctx); err != nil {
+		fmt.Println("Erro ao parar o servidor:", err)
+	} else {
+		log.Println("Servidor fechado com sucesso")
 	}
 
 	return nil

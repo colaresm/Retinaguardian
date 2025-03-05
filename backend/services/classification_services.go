@@ -24,7 +24,7 @@ func CreateNewClassification(cd utils.CreateClassificationParams) {
 		return
 	}
 
-	prediction, err := GetClassification(cd)
+	prediction, err := GetPrediction(cd)
 	if err != nil {
 		log.Println(err)
 		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
@@ -45,7 +45,7 @@ func CreateNewClassification(cd utils.CreateClassificationParams) {
 		return
 	}
 }
-func GetClassification(cd utils.CreateClassificationParams) (int32, error) {
+func GetPrediction(cd utils.CreateClassificationParams) (int32, error) {
 	classificationUrl, err := utils.BuildUrlFromDotEnv("%s/api/classify")
 	if err != nil {
 		return 0, err
@@ -68,4 +68,17 @@ func GetClassification(cd utils.CreateClassificationParams) (int32, error) {
 		responses.DoctorErrorResponse(cd.W, errors.DoctorCreationError(err))
 	}
 	return int32(utils.ConvertPredictionResponseToIota(prediction.Prediction)), nil
+}
+
+func GetClassificationsByPatientId(lc utils.ListClassificationParams) ([]db.GetClassificationsByPatientIdRow, error) {
+	queries := lc.Queries
+
+	classificationsList, err := queries.GetClassificationsByPatientId(context.Background(), lc.PatientId)
+	if err != nil {
+		log.Println(err)
+		responses.DoctorErrorResponse(lc.W, errors.DoctorCreationError(err))
+		return nil, err
+	}
+
+	return classificationsList, nil
 }
