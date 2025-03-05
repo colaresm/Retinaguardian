@@ -37,12 +37,18 @@ type CreateDoctorParams struct {
 	W       http.ResponseWriter
 	Doctor  models.CreateDoctorRequest
 }
+
 type CreateClassificationParams struct {
 	Queries      *db.Queries
 	W            http.ResponseWriter
 	Retinography []byte
 	PatientId    string
 	Prediction   int
+}
+type ListClassificationParams struct {
+	Queries   *db.Queries
+	W         http.ResponseWriter
+	PatientId string
 }
 
 type Prediction int32
@@ -102,4 +108,39 @@ func BuildUrlFromDotEnv(path string) (string, error) {
 	}
 	url := fmt.Sprintf(path, baseURL)
 	return url, nil
+}
+func ConvertPredictionToString(prediction int32) string {
+	if prediction == 0 {
+		return "healthy"
+	}
+	return "presence"
+}
+func FormatDateToBrazilianFormat(dateToFormat string) (string, error) {
+	layout := "2006-01-02 15:04:05 -0700 MST"
+
+	t, err := time.Parse(layout, dateToFormat)
+	if err != nil {
+		return "", err
+	}
+
+	formattedDate := t.Format("02/01/2006")
+	return formattedDate, nil
+}
+
+func MapClassifications(classifications []db.GetClassificationsByPatientIdRow) ([]models.ClassificationResponse, error) {
+	var responses []models.ClassificationResponse
+
+	for _, classification := range classifications {
+		performedDate, err := FormatDateToBrazilianFormat(classification.PerformedDate.String())
+		if err != nil {
+			return nil, err
+		}
+		response := models.ClassificationResponse{
+			Retinography:  classification.Retinography,
+			PerformedDate: performedDate,
+			Prediction:    ConvertPredictionToString(classification.Prediction),
+		}
+		responses = append(responses, response)
+	}
+	return responses, nil
 }

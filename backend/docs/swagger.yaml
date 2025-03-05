@@ -5,6 +5,17 @@ definitions:
       access_token:
         type: string
     type: object
+  models.ClassificationResponse:
+    properties:
+      performed_date:
+        type: string
+      prediction:
+        type: string
+      retinography:
+        items:
+          type: integer
+        type: array
+    type: object
   models.CreateClassificationRequest:
     properties:
       patient_id:
@@ -73,7 +84,22 @@ paths:
             $ref: '#/definitions/models.CreateClassificationRequest'
       summary: Create Classification
       tags:
-      - Create Classification Handler
+      - Classification
+  /api/classifications:
+    get:
+      consumes:
+      - application/json
+      description: Get List Of Classifications By Patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ClassificationResponse'
+      summary: Get Classifications
+      tags:
+      - Classification
   /api/doctor:
     post:
       consumes:
@@ -118,7 +144,7 @@ paths:
             $ref: '#/definitions/models.AuthResponse'
       summary: Get access token
       tags:
-      - Login Handler
+      - Login
   /api/patient:
     post:
       consumes:

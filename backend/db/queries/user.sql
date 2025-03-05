@@ -18,3 +18,10 @@ VALUES ($1, $2, $3, $4,$5);
 -- name: CreateClassification :exec
 INSERT INTO classifications (id, patient_id,retinography,performed_date,prediction)
 VALUES ($1, $2, $3, $4,$5);
+
+-- name: GetClassificationsByPatientId :many
+SELECT retinography, performed_date, prediction  
+FROM classifications  
+WHERE patient_id = $1;
+
+

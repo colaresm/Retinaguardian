@@ -23,10 +23,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: constraints.maxHeight * 0.06,
             ),
-            CustomElevatedButton(
-            
-                hintText: "Novo paciente",
-                onPressed: () {}),
+            CustomElevatedButton(hintText: "Novo paciente", onPressed: () {}),
             Padding(
               padding: EdgeInsets.only(
                   left: constraints.maxWidth * 0.07,
@@ -41,7 +38,8 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-            )
+            ),
+          
           ],
         ),
       );
