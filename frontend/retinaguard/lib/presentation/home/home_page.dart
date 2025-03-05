@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:retinaguard/core/redirect_pages.dart';
 import 'package:retinaguard/widgets/body.dart';
 import 'package:retinaguard/widgets/custom_elevated_button.dart';
 
