@@ -9,8 +9,9 @@ func IsValidPatient(queries *db.Queries, patient models.CreatePatientRequest) (e
 	if errorMessage, isValidBasicInformations := IsValidBasicInformations(patient.Name, patient.Birthday); isValidBasicInformations {
 		return errorMessage, false
 	}
-	if errorMessage, isValidUser := IsValidUser(queries, patient.User); isValidUser {
+	if errorMessage, isValidUser := IsValidUser(queries, patient.User); !isValidUser {
 		return errorMessage, false
 	}
+
 	return nil, true
 }

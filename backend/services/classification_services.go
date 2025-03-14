@@ -33,7 +33,7 @@ func CreateNewClassification(cd utils.CreateClassificationParams) {
 
 	err = queries.CreateClassification(context.Background(), db.CreateClassificationParams{
 		ID:            uuid.New().String(),
-		PatientID:     cd.PatientId,
+		UserID:        cd.UserId,
 		Retinography:  cd.Retinography,
 		PerformedDate: dataTime,
 		Prediction:    prediction,
@@ -73,7 +73,7 @@ func GetPrediction(cd utils.CreateClassificationParams) (int32, error) {
 func GetClassificationsByPatientId(lc utils.ListClassificationParams) ([]db.GetClassificationsByPatientIdRow, error) {
 	queries := lc.Queries
 
-	classificationsList, err := queries.GetClassificationsByPatientId(context.Background(), lc.PatientId)
+	classificationsList, err := queries.GetClassificationsByPatientId(context.Background(), lc.UserId)
 	if err != nil {
 		log.Println(err)
 		responses.DoctorErrorResponse(lc.W, errors.DoctorCreationError(err))

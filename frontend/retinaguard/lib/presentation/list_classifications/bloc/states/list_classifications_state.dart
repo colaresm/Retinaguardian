@@ -9,7 +9,7 @@ class ListClassificationsLoading extends ListClassificationsState {}
 class ListClassificationsSuccess extends ListClassificationsState {
   final List<ClassificationResponse> classifications;
 
-  ListClassificationsSuccess(this.classifications);
+  ListClassificationsSuccess({required this.classifications});
 }
 
 class ListClassificationsError extends ListClassificationsState {

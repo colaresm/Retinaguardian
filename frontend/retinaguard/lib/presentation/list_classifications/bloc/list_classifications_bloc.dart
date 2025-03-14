@@ -8,13 +8,19 @@ class ListClassificationsBloc
     extends Bloc<ListClassificationsEvent, ListClassificationsState> {
   final ListClassificationsUseCase _listClassificationsUseCase;
 
-  ListClassificationsBloc(this._listClassificationsUseCase) : super(ListClassificationsInitial()) {
+  ListClassificationsBloc(this._listClassificationsUseCase)
+      : super(ListClassificationsInitial()) {
     on<GetClassificationsEvent>((event, emit) async {
       emit(ListClassificationsLoading());
       try {
         final response =
             await _listClassificationsUseCase.execute(event.patientId);
-        emit(ListClassificationsSuccess(response));
+
+        emit(
+          ListClassificationsSuccess(
+            classifications: response,
+          ),
+        );
       } catch (e) {
         emit(ListClassificationsError(e.toString()));
       }

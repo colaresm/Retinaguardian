@@ -36,14 +36,14 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 			return
 		}
 		defer file.Close()
-		patientId := string(r.FormValue("patient_id"))
+		userId := string(r.FormValue("patient_id"))
 
 		retinography, _ := io.ReadAll(file)
 		services.CreateNewClassification(utils.CreateClassificationParams{
 			Queries:      queries,
 			W:            w,
 			Retinography: retinography,
-			PatientId:    patientId})
+			UserId:       userId})
 
 		responses.SendJSON(w, models.Response{Data: nil}, http.StatusCreated)
 	}
@@ -67,13 +67,13 @@ func listClassificationsHandler(queries *db.Queries) http.HandlerFunc {
 			return
 		}
 
-		patientId := r.URL.Query().Get("patient_id")
+		userId := r.URL.Query().Get("user_id")
 
 		classifications, err := services.GetClassificationsByPatientId(
 			utils.ListClassificationParams{
-				Queries:   queries,
-				PatientId: patientId,
-				W:         w,
+				Queries: queries,
+				UserId:  userId,
+				W:       w,
 			})
 		if err != nil {
 			responses.ClassificationErrorResponse(w, errors.ClassificationListError(err))

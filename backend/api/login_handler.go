@@ -34,7 +34,7 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 					Error: err.Error()}}, http.StatusInternalServerError)
 			}
 			responses.SendJSON(w, models.Response{
-				Data: models.AuthResponse{AccessToken: accessToken}}, http.StatusOK)
+				Data: models.AuthResponse{AccessToken: accessToken, UserId: foundUser.ID}}, http.StatusOK)
 			return
 		} else {
 			responses.SendJSON(w, models.Response{

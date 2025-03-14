@@ -42,13 +42,13 @@ type CreateClassificationParams struct {
 	Queries      *db.Queries
 	W            http.ResponseWriter
 	Retinography []byte
-	PatientId    string
+	UserId       string
 	Prediction   int
 }
 type ListClassificationParams struct {
-	Queries   *db.Queries
-	W         http.ResponseWriter
-	PatientId string
+	Queries *db.Queries
+	W       http.ResponseWriter
+	UserId  string
 }
 
 type Prediction int32

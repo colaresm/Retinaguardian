@@ -1,5 +1,6 @@
 class User {
   final String accessToken;
+  final String userId;
 
-  User({required this.accessToken});
+  User({required this.accessToken, required this.userId});
 }

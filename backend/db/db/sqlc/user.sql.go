@@ -11,13 +11,13 @@ import (
 )
 
 const createClassification = `-- name: CreateClassification :exec
-INSERT INTO classifications (id, patient_id,retinography,performed_date,prediction)
+INSERT INTO classifications (id, user_id,retinography,performed_date,prediction)
 VALUES ($1, $2, $3, $4,$5)
 `
 
 type CreateClassificationParams struct {
 	ID            string
-	PatientID     string
+	UserID        string
 	Retinography  []byte
 	PerformedDate time.Time
 	Prediction    int32
@@ -26,7 +26,7 @@ type CreateClassificationParams struct {
 func (q *Queries) CreateClassification(ctx context.Context, arg CreateClassificationParams) error {
 	_, err := q.db.ExecContext(ctx, createClassification,
 		arg.ID,
-		arg.PatientID,
+		arg.UserID,
 		arg.Retinography,
 		arg.PerformedDate,
 		arg.Prediction,
@@ -97,19 +97,20 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 }
 
 const getClassificationsByPatientId = `-- name: GetClassificationsByPatientId :many
-SELECT retinography, performed_date, prediction  
+SELECT retinography, performed_date, prediction, user_id  
 FROM classifications  
-WHERE patient_id = $1
+WHERE user_id = $1
 `
 
 type GetClassificationsByPatientIdRow struct {
 	Retinography  []byte
 	PerformedDate time.Time
 	Prediction    int32
+	UserID        string
 }
 
-func (q *Queries) GetClassificationsByPatientId(ctx context.Context, patientID string) ([]GetClassificationsByPatientIdRow, error) {
-	rows, err := q.db.QueryContext(ctx, getClassificationsByPatientId, patientID)
+func (q *Queries) GetClassificationsByPatientId(ctx context.Context, userID string) ([]GetClassificationsByPatientIdRow, error) {
+	rows, err := q.db.QueryContext(ctx, getClassificationsByPatientId, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +118,12 @@ func (q *Queries) GetClassificationsByPatientId(ctx context.Context, patientID s
 	var items []GetClassificationsByPatientIdRow
 	for rows.Next() {
 		var i GetClassificationsByPatientIdRow
-		if err := rows.Scan(&i.Retinography, &i.PerformedDate, &i.Prediction); err != nil {
+		if err := rows.Scan(
+			&i.Retinography,
+			&i.PerformedDate,
+			&i.Prediction,
+			&i.UserID,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
