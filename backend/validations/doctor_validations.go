@@ -13,7 +13,7 @@ func IsValidDoctor(queries *db.Queries, doctor models.CreateDoctorRequest) (erro
 	if doctor.Crm == "" {
 		return errors.New("CRM inválido"), false
 	}
-	if errorMessage, isValidUser := IsValidUser(queries, doctor.User); isValidUser {
+	if errorMessage, isValidUser := IsValidUser(queries, doctor.User); !isValidUser {
 		return errorMessage, false
 	}
 	return nil, true

@@ -26,6 +26,8 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 		if err != nil {
 			log.Println(err)
 		}
+		log.Println(u.Email)
+		log.Println(u.Password)
 		matchPassword := CheckPasswordHash(u.Password, foundUser.Password)
 		if u.Email == foundUser.Email && matchPassword {
 			accessToken, err := CreateToken(u.Email)
@@ -37,8 +39,7 @@ func loginHandler(queries *db.Queries) http.HandlerFunc {
 				Data: models.AuthResponse{AccessToken: accessToken, UserId: foundUser.ID}}, http.StatusOK)
 			return
 		} else {
-			responses.SendJSON(w, models.Response{
-				Data: models.Response{Error: "Credenciais inválidas"}}, http.StatusUnauthorized)
+			responses.SendJSON(w, models.Response{Error: "Email ou senha incorretos"}, http.StatusUnauthorized)
 		}
 	}
 }

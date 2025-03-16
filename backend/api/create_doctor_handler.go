@@ -27,7 +27,11 @@ func createDoctorHandler(queries *db.Queries) http.HandlerFunc {
 			responses.DoctorErrorResponse(w, errors.DoctorCreationError(err))
 			return
 		}
-		services.CreateNewDoctor(utils.CreateDoctorParams{Queries: queries, W: w, Doctor: d})
+		err = services.CreateNewDoctor(utils.CreateDoctorParams{Queries: queries, W: w, Doctor: d})
+		if err != nil {
+			responses.DoctorErrorResponse(w, errors.DoctorCreationError(err))
+			return
+		}
 		responses.SendJSON(w, models.Response{Data: nil}, http.StatusCreated)
 	}
 }

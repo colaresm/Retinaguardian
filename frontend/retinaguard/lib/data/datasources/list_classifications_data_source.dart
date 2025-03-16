@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:retinaguard/core/token_storage.dart';
 import 'package:retinaguard/data/models/classification_response_model.dart';
 import 'package:retinaguard/data/models/error_response.dart';
 import 'package:http/http.dart' as http;
@@ -15,13 +16,13 @@ class ListClassificationsDataSourceImpl
       String patientId) async {
     var url = Uri.http(
         'localhost:8034', '/api/classifications', {'patient_id': patientId});
+    final token = await TokenStorage.getAccessToken();
+    final response = await http.get(url,
+        headers: {"Content-Type": "application/json", "Authorization": token!});
 
-    final response =
-        await http.get(url, headers: {"Content-Type": "application/json"});
-    print(response.statusCode == 200);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      List<dynamic> jsonList = jsonResponse["data"]; // Pegando a lista correta
+      List<dynamic> jsonList = jsonResponse["data"];
 
       return jsonList
           .map((json) => ClassificationResponseModel.fromJson(json))

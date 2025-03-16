@@ -6,6 +6,7 @@ import 'package:retinaguard/domain/use_cases/dependency_injection.dart';
 import 'package:retinaguard/presentation/list_classifications/bloc/events/list_classifications_event.dart';
 import 'package:retinaguard/presentation/list_classifications/bloc/list_classifications_bloc.dart';
 import 'package:retinaguard/widgets/body.dart';
+import 'package:retinaguard/widgets/error_message.dart';
 
 import 'bloc/states/list_classifications_state.dart';
 
@@ -21,7 +22,7 @@ class _ListClassificationsPageState extends State<ListClassificationsPage> {
   late final ListClassificationsBloc _listClassificationsBloc;
   late String? userId;
   @override
-  void initState() async {
+  void initState() {
     _listClassificationsBloc = getDependency<ListClassificationsBloc>();
     _getClassifications();
     super.initState();
@@ -69,7 +70,10 @@ class _ListClassificationsPageState extends State<ListClassificationsPage> {
                   ),
                 );
               }
-              return Text(state.toString());
+              if (state is ListClassificationsError) {
+                return const ErrorMessage();
+              }
+              return const SizedBox.shrink();
             },
           ),
         );
