@@ -22,7 +22,8 @@ class CreateDoctorDataSourceImpl implements CreateDoctorDataSource {
     if (response.statusCode == 201) {
       return EmptyResponseModel();
     } else {
-      throw ErrorModel.fromJson(jsonDecode(response.body)).message;
+      throw ErrorModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
+          .message;
     }
   }
 }

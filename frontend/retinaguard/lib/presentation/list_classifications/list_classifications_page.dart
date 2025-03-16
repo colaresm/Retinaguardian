@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retinaguard/core/show_toast.dart';
+import 'package:retinaguard/core/token_storage.dart';
 import 'package:retinaguard/domain/use_cases/dependency_injection.dart';
 import 'package:retinaguard/presentation/list_classifications/bloc/events/list_classifications_event.dart';
 import 'package:retinaguard/presentation/list_classifications/bloc/list_classifications_bloc.dart';
 import 'package:retinaguard/widgets/body.dart';
+import 'package:retinaguard/widgets/error_message.dart';
 
 import 'bloc/states/list_classifications_state.dart';
 
@@ -18,12 +20,11 @@ class ListClassificationsPage extends StatefulWidget {
 
 class _ListClassificationsPageState extends State<ListClassificationsPage> {
   late final ListClassificationsBloc _listClassificationsBloc;
-
+  late String? userId;
   @override
   void initState() {
     _listClassificationsBloc = getDependency<ListClassificationsBloc>();
-    _listClassificationsBloc.add(GetClassificationsEvent(
-        patientId: "cdb8219f-8fdb-4ef0-a7d5-ebfe83edb390l"));
+    _getClassifications();
     super.initState();
   }
 
@@ -35,7 +36,8 @@ class _ListClassificationsPageState extends State<ListClassificationsPage> {
           showHeaderElements: true,
           onRefresh: () => _listClassificationsBloc.add(
             GetClassificationsEvent(
-                patientId: "cdb8219f-8fdb-4ef0-a7d5-ebfe83edb390"),
+              patientId: userId!,
+            ),
           ),
           constraints: constraints,
           content:
@@ -51,7 +53,6 @@ class _ListClassificationsPageState extends State<ListClassificationsPage> {
                 return const CircularProgressIndicator();
               }
               if (state is ListClassificationsSuccess) {
-                print(state.classifications.first.retinography);
                 return Visibility(
                   visible: state.classifications.isNotEmpty,
                   replacement: const Text("Lista vazia"),
@@ -69,11 +70,23 @@ class _ListClassificationsPageState extends State<ListClassificationsPage> {
                   ),
                 );
               }
-              return Text(state.toString());
+              if (state is ListClassificationsError) {
+                return const ErrorMessage();
+              }
+              return const SizedBox.shrink();
             },
           ),
         );
       },
+    );
+  }
+
+  void _getClassifications() async {
+    userId = await TokenStorage.getUserId();
+    _listClassificationsBloc.add(
+      GetClassificationsEvent(
+        patientId: userId!,
+      ),
     );
   }
 }

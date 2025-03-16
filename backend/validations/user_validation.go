@@ -18,6 +18,7 @@ func IsValidUser(queries *db.Queries, user models.User) (error, bool) {
 	}
 
 	foundUser, _ := queries.GetUserByEmail(context.Background(), user.Email)
+
 	if utils.IsEmailAlreadyRegistered(foundUser.Email, user.Email) {
 		return errors.New("email já registrado"), false
 	}

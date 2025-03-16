@@ -18,5 +18,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 - **Email**: colaresmarcelo2018@gmail.com
+<<<<<<< HEAD
 - **LinkedIn**: [engmarcelocolares](https://www.linkedin.com/in/yourlinkedin](https://www.linkedin.com/in/engmarcelocolares/))
+=======
+- **LinkedIn**: [engmarcelocolares](https://www.linkedin.com/in/engmarcelocolares/)
+>>>>>>> add-bear-validation-to-requests
 

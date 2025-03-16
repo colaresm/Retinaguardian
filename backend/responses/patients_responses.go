@@ -2,6 +2,7 @@ package responses
 
 import (
 	"encoding/json"
+	"log"
 	"log/slog"
 	"net/http"
 
@@ -16,6 +17,7 @@ func SendJSON(w http.ResponseWriter, resp models.Response, status int) {
 		SendJSON(w, models.Response{Error: "somenthing went wrong"}, http.StatusInternalServerError)
 		return
 	}
+	log.Println("data")
 	w.WriteHeader(status)
 	if _, err := w.Write(data); err != nil {
 		slog.Error("failed to write response to client", "error", err)

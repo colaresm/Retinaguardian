@@ -11,7 +11,7 @@ import (
 type Classification struct {
 	ID            string
 	Retinography  []byte
-	PatientID     string
+	UserID        string
 	PerformedDate time.Time
 	Prediction    int32
 }

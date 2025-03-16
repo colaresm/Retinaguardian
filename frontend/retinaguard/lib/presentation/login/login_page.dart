@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
       _loginBloc.add(
         AuthEvent(
           email: _emailCotroller.text,
-          password: _emailCotroller.text,
+          password: _passwordCotroller.text,
         ),
       );
     }

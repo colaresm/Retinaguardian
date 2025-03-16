@@ -10,6 +10,7 @@ import (
 	"retinaguard/responses"
 	"retinaguard/services"
 	"retinaguard/utils"
+	"retinaguard/validations"
 )
 
 // CreateClassificationHandler
@@ -35,14 +36,14 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 			return
 		}
 		defer file.Close()
-		patientId := string(r.FormValue("patient_id"))
+		userId := string(r.FormValue("patient_id"))
 
 		retinography, _ := io.ReadAll(file)
 		services.CreateNewClassification(utils.CreateClassificationParams{
 			Queries:      queries,
 			W:            w,
 			Retinography: retinography,
-			PatientId:    patientId})
+			UserId:       userId})
 
 		responses.SendJSON(w, models.Response{Data: nil}, http.StatusCreated)
 	}
@@ -58,15 +59,21 @@ func classificationHandler(queries *db.Queries) http.HandlerFunc {
 // @Router /api/classifications [GET]
 func listClassificationsHandler(queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		patientId := r.URL.Query().Get("patient_id")
+		w.Header().Set("Content-Type", "application/json")
 
-		log.Println(patientId)
+		err := validations.ValidateToken(w, r)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		userId := r.URL.Query().Get("user_id")
 
 		classifications, err := services.GetClassificationsByPatientId(
 			utils.ListClassificationParams{
-				Queries:   queries,
-				PatientId: patientId,
-				W:         w,
+				Queries: queries,
+				UserId:  userId,
+				W:       w,
 			})
 		if err != nil {
 			responses.ClassificationErrorResponse(w, errors.ClassificationListError(err))

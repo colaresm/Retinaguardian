@@ -133,6 +133,6 @@ class _CreateDoctorPageState extends State<CreateDoctorPage> {
 
   void _onCreationDoctor({required String message, bool isError = false}) {
     showToast(message: message, isError: isError);
-    redirectToLoginPage(context);
+    !isError ? redirectToLoginPage(context) : null;
   }
 }
