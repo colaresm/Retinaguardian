@@ -2,6 +2,9 @@
 
 This project consists of a backend developed in Go and a mobile interface built with Flutter/Dart. It enables ophthalmologists to capture or upload retinal images via the mobile interface. The system allows for the segmentation of retinal vessels, detection of diabetic retinopathy (DR), and lesion segmentation, providing an efficient tool for the analysis and diagnosis of eye diseases. The backend processes the images and applies machine learning models for precise detection and segmentation, while the mobile app offers an intuitive and user-friendly interface for healthcare professionals.
 
+# Screenshots
+<img src="imagens/home.png" alt="Home page" width="300">
+
 
 ## Contributing
 
@@ -18,9 +21,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 - **Email**: colaresmarcelo2018@gmail.com
-<<<<<<< HEAD
 - **LinkedIn**: [engmarcelocolares](https://www.linkedin.com/in/yourlinkedin](https://www.linkedin.com/in/engmarcelocolares/))
-=======
-- **LinkedIn**: [engmarcelocolares](https://www.linkedin.com/in/engmarcelocolares/)
->>>>>>> add-bear-validation-to-requests
 

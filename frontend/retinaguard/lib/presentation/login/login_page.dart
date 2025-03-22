@@ -32,9 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[500],
-      ),
+      appBar: AppBar(),
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
@@ -54,7 +52,10 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: constraints.maxHeight * 0.1,
                   ),
-                  Image.asset('assets/logo.png'),
+                  Image.asset(
+                    'assets/logo.png',
+                    width: constraints.maxWidth * 0.8,
+                  ),
                   SizedBox(
                     height: constraints.maxHeight * 0.05,
                   ),
@@ -86,11 +87,6 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        redirectToListClassificationsPage(context);
-                      },
-                      child: Text("ss")),
                   GestureDetector(
                     onTap: () => redirectToCrateDoctorPage(context),
                     child: Text(

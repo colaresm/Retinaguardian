@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.controller,
     this.isPassword = false,
-  required  this.validator,
+    required this.validator,
     Key? key,
   }) : super(key: key);
 
@@ -26,6 +26,8 @@ class CustomTextField extends StatelessWidget {
           obscureText: isPassword,
           controller: controller,
           decoration: InputDecoration(
+            focusedErrorBorder: _errorBorder(),
+            errorBorder: _errorBorder(),
             hintText: hintText.toUpperCase(),
             filled: true,
             fillColor: Colors.white,
@@ -37,15 +39,24 @@ class CustomTextField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderSide:
+                   BorderSide(color:Theme.of(context).colorScheme.secondary),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
-              borderSide: const BorderSide(color: Colors.green, width: 2),
+              borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary, width: 2),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  InputBorder? _errorBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(30),
+      borderSide: const BorderSide(color: Colors.red, width: 1),
     );
   }
 }

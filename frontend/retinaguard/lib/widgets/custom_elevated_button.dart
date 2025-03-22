@@ -14,12 +14,12 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.86,
+      width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.06,
       child: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[500]),
+          style: ElevatedButton.styleFrom(backgroundColor:Theme.of(context).primaryColor),
           onPressed: widget.onPressed,
           child: Text(
             widget.hintText.toUpperCase(),
