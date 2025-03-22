@@ -21,25 +21,33 @@ class _HomePageState extends State<HomePage> {
         content: Column(
           children: [
             SizedBox(
-              height: constraints.maxHeight * 0.06,
+              height: constraints.maxHeight * 0.08,
             ),
             CustomElevatedButton(hintText: "Novo paciente", onPressed: () {}),
+            SizedBox(
+              height: constraints.maxHeight * 0.02,
+            ),
             Padding(
               padding: EdgeInsets.only(
-                  left: constraints.maxWidth * 0.07,
-                  right: constraints.maxWidth * 0.07),
+                top: 10,
+                left: constraints.maxWidth * 0.07,
+                right: constraints.maxWidth * 0.07,
+              ),
               child: SizedBox(
-                height: constraints.maxHeight * 0.6,
+                height: constraints.maxHeight * 0.5,
                 width: constraints.maxWidth,
-                child: ListView.builder(
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return CustomCard();
-                  },
+                child: RawScrollbar(
+                  thumbVisibility: true,
+                  thumbColor: Theme.of(context).primaryColor,
+                  child: ListView.builder(
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return const CustomCard();
+                    },
+                  ),
                 ),
               ),
             ),
-          
           ],
         ),
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:retinaguard/widgets/cusmtom_bottom_navigation_bar.dart';
 
 class Body extends StatefulWidget {
   const Body(
@@ -23,6 +24,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: const CustomBottomNavigationBar(),
       appBar: AppBar(
         actions: [
           Visibility(
@@ -48,70 +50,44 @@ class _BodyState extends State<Body> {
             ),
           )
         ],
-        backgroundColor: Colors.blue[500],
+        backgroundColor: Theme.of(context).primaryColor,
       ),
-      backgroundColor: Colors.blue[500],
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          children: [
-            Visibility(
-              visible: widget.showHeaderElements,
-              child: Container(
-                height: constraints.maxHeight * 0.1,
+      backgroundColor: Theme.of(context).primaryColor,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            children: [
+              Visibility(
+                visible: widget.showHeaderElements,
+                child: Container(
+                  height: constraints.maxHeight * 0.03,
+                  width: constraints.maxWidth,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Row(
+                    children: [],
+                  ),
+                ),
+              ),
+              Container(
+                height: constraints.maxHeight * 0.95,
                 width: constraints.maxWidth,
                 decoration: BoxDecoration(
-                  color: Colors.blue[500],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 28.0),
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Bem vindo,\n",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "Marcelo",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: widget.showHeaderElements
-                  ? constraints.maxHeight * 0.88
-                  : constraints.maxHeight * 0.97,
-              width: constraints.maxWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SmartRefresher(
+                child: SmartRefresher(
                   onRefresh: widget.onRefresh != null ? _onRefresh : () {},
                   controller: _refreshController,
-                  child: widget.content),
-            ),
-          ],
-        );
-      }),
+                  child: widget.content,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

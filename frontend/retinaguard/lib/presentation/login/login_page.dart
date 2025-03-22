@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            showToast(message: "Login realizado com sucesso", isError: true);
+            showToast(message: "Login realizado com sucesso", isError: false);
             redirectToHomePage(context);
           }
           if (state is LoginError) {
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       "Criar conta",
                       style: TextStyle(
-                        color: Colors.blue[500],
+                        color: Theme.of(context).primaryColor,
                         fontSize: 16,
                         decoration: TextDecoration.underline,
                       ),
@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       "Esqueceu a senha?",
                       style: TextStyle(
-                        color: Colors.blue[500],
+                        color: Theme.of(context).primaryColor,
                         fontSize: 16,
                         decoration: TextDecoration.underline,
                       ),
