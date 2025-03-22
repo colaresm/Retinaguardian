@@ -6,6 +6,7 @@ This project consists of a backend developed in Go and a mobile interface built 
 <div style="display: flex; gap: 10px;">
     <img src="images/home.png" alt="Home page" width="300">
     <img src="images/patients.png" alt="Patients page" width="300">
+        <img src="images/patients.png" alt="Patients page" width="300">
 </div>
 
 
